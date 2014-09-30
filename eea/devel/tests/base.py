@@ -27,8 +27,6 @@ class EEAFixture(PloneSandboxLayer):
     def setUpPloneSite(self, portal):
         """ Setup Plone
         """
-        self.applyProfile(portal, 'eea.devel:default')
-
         # Login as manager
         setRoles(portal, TEST_USER_ID, ['Manager'])
 

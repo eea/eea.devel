@@ -6,17 +6,22 @@ EEA Devel
 .. image:: http://ci.eionet.europa.eu/job/eea.devel-plone4/badge/icon
   :target: http://ci.eionet.europa.eu/job/eea.devel-plone4/lastBuild
 
-EEA Devel
+EEA Devel is a helper package to be used with a new EEA Data.fs.
+
 
 Contents
 ========
 
 .. contents::
 
+
 Main features
 =============
 
 1. Hooks EEA Data.fs to make it development ready
+2. Creates a user with Manager roles within Zope root acl_users named **eeadevel**
+3. Removes **cookie_domain** from Plone Site acl_users / plone_session in order
+   to be able to login with ldap user
 
 
 Install
@@ -25,7 +30,8 @@ Install
 - Add eea.devel to your eggs section in your buildout and re-run buildout.
   You can download a sample buildout from
   https://github.com/eea/eea.devel/tree/master/buildouts/plone4
-- Install eea.devel within Site Setup > Add-ons
+- Within console search for created admin user name and password
+- Login to `ZMI`_ with user **eeadevel**
 
 
 Source code
@@ -55,3 +61,4 @@ Funding
 EEA_ - European Environment Agency (EU)
 
 .. _EEA: http://www.eea.europa.eu/
+.. _ZMI: http://localhost:2020/manage
