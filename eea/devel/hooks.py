@@ -1,4 +1,8 @@
 """ Development hooks
+
+    >>> from plone import api
+    >>> portal = layer['portal']
+
 """
 import string
 import random
@@ -12,6 +16,13 @@ logger = logging.getLogger('eea.devel')
 
 class Setup(object):
     """ Setup development environment
+
+        >>> from eea.devel.hooks import Setup
+        >>> root = portal.getParentNode()
+        >>> setup = Setup(root, devel=True)
+        >>> setup
+        <eea.devel.hooks.Setup object at ...>
+
     """
     def __init__(self, root, devel=True):
         self._root = root
@@ -26,30 +37,50 @@ class Setup(object):
     @property
     def root(self):
         """ Zope root
+
+            >>> setup.root
+            <Application at >
+
         """
         return self._root
 
     @property
     def sites(self):
         """ Plone Sites
+
+            >>> setup.sites
+            [<PloneSite at /plone>]
+
         """
         return self._sites
 
     @property
     def user(self):
         """ Zope user
+
+            >>> setup.user
+            'eeadevel'
+
         """
         return self._user
 
     @property
     def changed(self):
         """ Changed
+
+            >>> setup.changed
+            False
+
         """
         return self._changed
 
     @property
     def devel(self):
         """ Development enabled
+
+            >>> setup.devel
+            True
+
         """
         return self._devel
 
@@ -58,6 +89,10 @@ class Setup(object):
     #
     def password(self, size=16):
         """ Generate random password
+
+            >>> setup.password()
+            '...'
+
         """
         chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
         return ''.join(random.choice(chars) for _ in range(size)).encode('utf8')
@@ -242,6 +277,45 @@ class Setup(object):
             setSite(oldSite)
 
     def __call__(self):
+        """ Run development setup
+
+        This setup is called on zope startup. Let's check if everything was set
+
+        Zope admin user:
+
+            >>> setup.root.acl_users.users.getUserIdForLogin('eeadevel')
+            'eeadevel'
+
+        Plone users for each role:
+
+            >>> api.user.get('eeaDevelManager')
+            <MemberData at /plone/portal_memberdata/eeaDevelManager ...>
+
+            >>> api.user.get('eeaDevelReviewer')
+            <MemberData at /plone/portal_memberdata/eeaDevelReviewer ...>
+
+
+        Cleanup is called when Zope is started normally (not fg)
+
+            >>> setup._devel = False
+            >>> setup()
+
+        Zope user shouldn't be there anymore
+
+            >>> setup.root.acl_users.users.getUserIdForLogin('eeadevel')
+            Traceback (most recent call last):
+            ...
+            KeyError: 'eeadevel'
+
+        Neither Plone users
+
+            >>> api.user.get('eeaDevelManager') is None
+            True
+
+            >>> api.user.get('eeaDevelReviewer') is None
+            True
+
+        """
         if not self.devel:
             return self.cleanup()
         return self.apply()

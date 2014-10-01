@@ -11,7 +11,6 @@ logger = logging.getLogger('eea.devel')
 def initialize(context):
     """ Initializer called when used as a Zope 2 product.
     """
-
     transaction.get().note('eea.devel: before applying development hacks')
     transaction.commit()
 

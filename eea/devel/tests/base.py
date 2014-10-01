@@ -6,6 +6,7 @@ from plone.app.testing import setRoles
 from plone.app.testing import PloneSandboxLayer
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import FunctionalTesting
+import Globals
 
 class EEAFixture(PloneSandboxLayer):
     """ EEA Testing Policy
@@ -15,6 +16,7 @@ class EEAFixture(PloneSandboxLayer):
     def setUpZope(self, app, configurationContext):
         """ Setup Zope
         """
+        Globals.DevelopmentMode = True
         import eea.devel
         self.loadZCML(package=eea.devel)
         z2.installProduct(app, 'eea.devel')
@@ -23,6 +25,7 @@ class EEAFixture(PloneSandboxLayer):
         """ Uninstall Zope
         """
         z2.uninstallProduct(app, 'eea.devel')
+        Globals.DevelopmentMode = False
 
     def setUpPloneSite(self, portal):
         """ Setup Plone

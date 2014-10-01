@@ -16,6 +16,12 @@ def test_suite():
     suite.addTests([
         layered(
             doctest.DocFileSuite(
+                'hooks.py',
+                optionflags=OPTIONFLAGS,
+                package='eea.devel'),
+            layer=FUNCTIONAL_TESTING),
+        layered(
+            doctest.DocFileSuite(
                 'README.txt',
                 optionflags=OPTIONFLAGS,
                 package='eea.devel'),
