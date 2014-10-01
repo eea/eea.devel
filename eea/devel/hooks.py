@@ -292,10 +292,12 @@ class Setup(object):
             >>> api.user.get('eeaDevelReviewer')
             <MemberData at /plone/portal_memberdata/eeaDevelReviewer ...>
 
+        Zope restart (fg):
+
+            >>> setup()
 
         Cleanup is called when Zope is started normally (not fg)
 
-            >>> setup()
             >>> setup._devel = False
             >>> setup()
 
@@ -313,6 +315,10 @@ class Setup(object):
 
             >>> api.user.get('eeaDevelReviewer') is None
             True
+
+        Second Zope restart normally:
+
+            >>> setup()
 
         """
         if not self.devel:
