@@ -60,7 +60,7 @@ class Setup(object):
         """ Generate random password
         """
         chars = string.ascii_uppercase + string.ascii_lowercase + string.digits
-        return ''.join(random.choice(chars) for _ in range(size))
+        return ''.join(random.choice(chars) for _ in range(size)).encode('utf8')
 
     #
     # Zope root specific methods
@@ -88,8 +88,9 @@ class Setup(object):
 
         logger.warn(
             "\n**************************************************************\n"
-            "\nZOPE DEVEL MANAGER ADDED user: eeadevel password: %s\n"
+            "\nZOPE DEVEL MANAGER ADDED user: %s password: %s\n"
             "\n***************************************************************",
+            self.user,
             password
         )
         self._changed = True
@@ -143,17 +144,19 @@ class Setup(object):
     def add_plone_user(self, role):
         """ Create plone users for main roles
         """
-        username = u"eeaDevel%s" % role.replace(' ', '')
+        username = ("eeaDevel%s" % role.replace(' ', '')).encode('utf8')
         user = api.user.get(username)
         password = self.password()
 
         if not user:
-            useremail = u"%s@example.com" % username
+            useremail = "%s@example.com" % username
             api.user.create(
                 email=useremail,
                 username=username,
                 password=password,
-                roles=('Member',)
+                properties={
+                    'fullname': ('EEA Devel %s' % role).encode('utf8')
+                }
             )
             if role != 'Member':
                 api.user.grant_roles(username=username, roles=[role])
@@ -184,19 +187,11 @@ class Setup(object):
     def remove_plone_user(self, role):
         """ Remove development Plone user by role
         """
-        username = u"eeaDevel%s" % role.replace(' ', '')
+        username = ("eeaDevel%s" % role.replace(' ', '')).encode('utf8')
         user = api.user.get(username)
         if not user:
             return
-
-        api.user.delete(username=username)
-        logger.warn(
-            "\n**************************************************************\n"
-            "\nPLONE DEVEL USER REMOVED. user: %s\n"
-            "\n***************************************************************",
-            username)
-        self._changed = True
-
+        return username
 
     def remove_plone_users(self):
         """ Remove development Plone users created by this package
@@ -204,12 +199,18 @@ class Setup(object):
         site = getSite()
         mtool = getToolByName(site, 'portal_membership')
         roles = [r for r in mtool.getPortalRoles() if r != 'Owner']
-        for role in roles:
-            try:
-                self.remove_plone_user(role)
-            except Exception, err:
-                logger.exception(err)
 
+        users = set()
+        for role in roles:
+            username = self.remove_plone_user(role)
+            if not username:
+                continue
+
+            users.add(username)
+
+        if users:
+            mtool.deleteMembers(tuple(users))
+            self._changed = True
     #
     # API
     #
@@ -223,10 +224,7 @@ class Setup(object):
         for site in self.sites:
             oldSite = getSite()
             setSite(site)
-
-            # XXX Heavy. Bypassed as it blocks starting Zope normally (non fg)
-            #self.remove_plone_users()
-
+            self.remove_plone_users()
             setSite(oldSite)
 
     def apply(self):
@@ -245,5 +243,5 @@ class Setup(object):
 
     def __call__(self):
         if not self.devel:
-            self.cleanup()
+            return self.cleanup()
         return self.apply()
