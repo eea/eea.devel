@@ -20,7 +20,8 @@ Main features
 
 1. Hooks EEA Data.fs to make it development ready
 2. Creates a user with Manager roles within Zope root acl_users named **eeadevel**
-3. Removes **cookie_domain** from Plone Site acl_users / plone_session in order
+3. Creates Plone users for each role within Plone Site.
+4. Removes **cookie_domain** from Plone Site acl_users / plone_session in order
    to be able to login with ldap user
 
 
@@ -31,6 +32,7 @@ Install
   You can download a sample buildout from
   https://github.com/eea/eea.devel/tree/master/buildouts/plone4
 - Within console search for created admin user name and password
+- Within console search for created Plone users by role
 - Login to `ZMI`_ with user **eeadevel**
 
 
