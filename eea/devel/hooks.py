@@ -103,8 +103,6 @@ class Setup(object):
     def add_zope_user(self):
         """ Add zope user
         """
-        if not self.devel:
-            return
         acl_users = getattr(self.root, 'acl_users', None)
         users = getattr(acl_users, 'users', None)
         roles = getattr(acl_users, 'roles', None)
@@ -297,6 +295,7 @@ class Setup(object):
 
         Cleanup is called when Zope is started normally (not fg)
 
+            >>> setup()
             >>> setup._devel = False
             >>> setup()
 
