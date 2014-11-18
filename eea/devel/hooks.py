@@ -278,13 +278,22 @@ class Setup(object):
             >>> setup.root.acl_users.users.getUserIdForLogin('eeadevel')
             'eeadevel'
 
+            >>> setup.root.acl_users.roles.listAssignedPrincipals('Manager')
+            [...'eeadevel'...]
+
         Plone users for each role:
 
             >>> api.user.get('eeaDevelManager')
             <MemberData at /plone/portal_memberdata/eeaDevelManager ...>
 
+            >>> api.user.get_roles('eeaDevelManager')
+            ['Member', 'Manager', 'Authenticated']
+
             >>> api.user.get('eeaDevelReviewer')
             <MemberData at /plone/portal_memberdata/eeaDevelReviewer ...>
+
+            >>> api.user.get_roles('eeaDevelReviewer')
+            ['Member', 'Reviewer', 'Authenticated']
 
         Zope restart (fg):
 
@@ -295,20 +304,19 @@ class Setup(object):
             >>> setup._devel = False
             >>> setup()
 
-        Zope user shouldn't be there anymore
+        Zope user shouldn't have Manager role anymore
 
-            >>> setup.root.acl_users.users.getUserIdForLogin('eeadevel')
-            Traceback (most recent call last):
-            ...
-            KeyError: 'eeadevel'
+            >>> setup.root.acl_users.roles.listAssignedPrincipals('Manager')
+            [('admin', 'admin')]
+
 
         Neither Plone users
 
-            >>> api.user.get('eeaDevelManager') is None
-            True
+            >>> api.user.get_roles('eeaDevelManager')
+            ['Authenticated']
 
-            >>> api.user.get('eeaDevelReviewer') is None
-            True
+            >>> api.user.get_roles('eeaDevelReviewer')
+            ['Authenticated']
 
         Second Zope restart normally:
 
