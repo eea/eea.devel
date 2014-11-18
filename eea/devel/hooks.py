@@ -140,7 +140,6 @@ class Setup(object):
 
         try:
             roles.removeRoleFromPrincipal('Manager', self.user)
-            users.removeUser(self.user)
         except Exception, err:
             logger.exception(err)
             return
@@ -224,6 +223,8 @@ class Setup(object):
         user = api.user.get(username)
         if not user:
             return
+
+        api.user.revoke_roles(username=username, roles=[role, 'Member'])
         return username
 
     def remove_plone_users(self):
@@ -233,17 +234,10 @@ class Setup(object):
         mtool = getToolByName(site, 'portal_membership')
         roles = [r for r in mtool.getPortalRoles() if r != 'Owner']
 
-        users = set()
         for role in roles:
             username = self.remove_plone_user(role)
-            if not username:
-                continue
-
-            users.add(username)
-
-        if users:
-            mtool.deleteMembers(tuple(users))
-            self._changed = True
+            if username:
+                self._changed = True
     #
     # API
     #
