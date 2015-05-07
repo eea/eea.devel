@@ -11,6 +11,14 @@ logger = logging.getLogger('eea.devel')
 def initialize(context):
     """ Initializer called when used as a Zope 2 product.
     """
+
+    db = getattr(Globals, 'DB', None)
+    storage = getattr(db, 'storage', None)
+    isReadOnly = getattr(storage, 'isReadOnly', lambda: False)
+    if isReadOnly():
+        logger.warn("!!! DISABLED. Database is mounted read-only !!!")
+        return
+
     transaction.get().note('eea.devel: before applying development hacks')
     transaction.commit()
 
