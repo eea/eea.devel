@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.2.dev0 - (unreleased)
------------------------
+1.2 - (2015-05-15)
+------------------
 * Feature: Support read-only database
   [voineali refs #25160]
 
