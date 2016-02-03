@@ -11,7 +11,6 @@ logger = logging.getLogger('eea.devel')
 def initialize(context):
     """ Initializer called when used as a Zope 2 product.
     """
-
     db = getattr(Globals, 'DB', None)
     storage = getattr(db, 'storage', None)
     isReadOnly = getattr(storage, 'isReadOnly', lambda: False)
@@ -19,8 +18,18 @@ def initialize(context):
         logger.warn("!!! DISABLED. Database is mounted read-only !!!")
         return
 
-    transaction.get().note('eea.devel: before applying development hacks')
-    transaction.commit()
+    try:
+        transaction.get().note('eea.devel: before applying development hacks')
+        transaction.commit()
+    except Exception, err:
+        logger.warn(
+            "\n**************************************************************\n"
+            "\nCan NOT apply development hacks. See error bellow.            \n"
+            "\n***************************************************************"
+        )
+        logger.exception(err)
+        transaction.abort()
+        return
 
     devel = True if Globals.DevelopmentMode else False
     if not devel:
@@ -31,5 +40,15 @@ def initialize(context):
     setup()
 
     if setup.changed:
-        transaction.get().note('eea.devel: applying development hacks')
-        transaction.commit()
+        try:
+            transaction.get().note('eea.devel: applying development hacks')
+            transaction.commit()
+        except Exception, err:
+            logger.warn(
+              "\n**************************************************************\n"
+              "\nCould NOT apply development hacks. See error bellow.          \n"
+              "\n***************************************************************"
+            )
+            logger.exception(err)
+            transaction.abort()
+            return
