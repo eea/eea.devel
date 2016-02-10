@@ -23,9 +23,9 @@ def initialize(context):
         transaction.commit()
     except Exception, err:
         logger.warn(
-            "\n**************************************************************\n"
-            "\nCan NOT apply development hacks. See error bellow.            \n"
-            "\n***************************************************************"
+            "\n************************************************************\n"
+            "\nCan NOT apply development hacks. See error bellow.          \n"
+            "\n**************************************************************"
         )
         logger.exception(err)
         transaction.abort()
@@ -45,9 +45,9 @@ def initialize(context):
             transaction.commit()
         except Exception, err:
             logger.warn(
-              "\n**************************************************************\n"
-              "\nCould NOT apply development hacks. See error bellow.          \n"
-              "\n***************************************************************"
+              "\n**********************************************************\n"
+              "\nCould NOT apply development hacks. See error bellow.      \n"
+              "\n************************************************************"
             )
             logger.exception(err)
             transaction.abort()
