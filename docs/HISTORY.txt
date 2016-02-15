@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.3.dev0 - (unreleased)
------------------------
+1.3 - (2016-02-15)
+------------------
 * Bug fix: Don't crash Plone instance on ConflictError
   [voineali refs #68160]
 
