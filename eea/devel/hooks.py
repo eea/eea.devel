@@ -112,9 +112,14 @@ class Setup(object):
         password = self.password()
         try:
             users.addUser(self.user, self.user, password)
-            roles.assignRoleToPrincipal('Manager', self.user)
         except KeyError, err:
             users.updateUserPassword(self.user, password)
+        except Exception, err:
+            logger.exception(err)
+            return
+
+        try:
+            roles.assignRoleToPrincipal('Manager', self.user)
         except Exception, err:
             logger.exception(err)
             return
@@ -127,7 +132,6 @@ class Setup(object):
             password
         )
         self._changed = True
-
 
     def remove_zope_user(self):
         """ Remove zope user

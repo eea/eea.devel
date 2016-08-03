@@ -3,6 +3,8 @@ Changelog
 
 1.5.dev0 - (unreleased)
 -----------------------
+* Bug fix: Fix zope user roles
+  [avoinea]
 
 1.4 - (2016-05-19)
 ------------------
