@@ -1,6 +1,9 @@
 Changelog
 =========
 
+1.6.dev0 - (unreleased)
+-----------------------
+
 1.5 - (2016-08-17)
 ------------------
 * Bug fix: Fix zope user roles
