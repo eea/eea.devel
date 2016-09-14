@@ -3,6 +3,8 @@ Changelog
 
 1.6.dev0 - (unreleased)
 -----------------------
+* Feature: memcached domain for Cache_ldap set to localhost
+  [alecghica refs #76251]
 
 1.5 - (2016-08-17)
 ------------------

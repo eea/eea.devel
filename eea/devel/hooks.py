@@ -242,6 +242,17 @@ class Setup(object):
             username = self.remove_plone_user(role)
             if username:
                 self._changed = True
+
+    def update_memcached_host(self):
+        """ Remove cookie domain
+        """
+
+        site = getSite()
+        cache_ldap = getattr(site, 'Cache_ldap', None)
+        cache_ldap._settings['servers'] = ('127.0.0.1:11211', )
+        logger.warn('Memcached domain for Cache_ldap set to 127.0.0.1:11211.')
+        self._changed = True
+
     #
     # API
     #
@@ -270,6 +281,7 @@ class Setup(object):
             setSite(site)
             self.remove_cookie_domain()
             self.add_plone_users()
+            self.update_memcached_host()
             setSite(oldSite)
 
     def __call__(self):
