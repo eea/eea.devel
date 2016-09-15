@@ -244,14 +244,16 @@ class Setup(object):
                 self._changed = True
 
     def update_memcached_host(self):
-        """ Remove cookie domain
+        """ Update memcached host to localhost
         """
-
         site = getSite()
-        cache_ldap = getattr(site, 'Cache_ldap', None)
-        cache_ldap._settings['servers'] = ('127.0.0.1:11211', )
-        logger.warn('Memcached domain for Cache_ldap set to 127.0.0.1:11211.')
-        self._changed = True
+        
+        memcached_managers = site.objectValues('Memcached Manager')
+        for obj in memcached_managers:
+            obj._settings['servers'] = ('127.0.0.1:11211', )
+            self._changed = True
+
+        logger.warn('Memcached domain set to 127.0.0.1:11211 for all "Memcached Manage" objects.')
 
     #
     # API
