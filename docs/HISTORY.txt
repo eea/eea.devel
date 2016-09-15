@@ -3,7 +3,7 @@ Changelog
 
 1.6.dev0 - (unreleased)
 -----------------------
-* Feature: memcached domain for set to localhost for
+* Feature: set memcached domain to localhost for
   all "Memcached Manage" objects
   [alecghica refs #76251]
 
