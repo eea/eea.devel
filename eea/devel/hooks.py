@@ -195,10 +195,14 @@ class Setup(object):
                     'fullname': ('EEA Devel %s' % role).encode('utf8')
                 }
             )
-            if role != 'Member':
-                api.user.grant_roles(username=username, roles=[role])
         else:
             user.setSecurityProfile(password=password)
+
+        if role != 'Member':
+            try:
+                api.user.grant_roles(username=username, roles=[role])
+            except Exception, err:
+                logger.exception(err)
 
         logger.warn(
             "\n**************************************************************\n"

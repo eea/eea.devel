@@ -3,6 +3,10 @@ Changelog
 
 1.7.dev0 - (unreleased)
 -----------------------
+* Feature: Also fix MEMCACHE_SERVER on all Memcache manager objects
+  [voineali refs #70800]
+* Bug fix: Fix Plone users roles
+  [voineali refs #70800]
 
 1.6 - (2016-09-19)
 ------------------
