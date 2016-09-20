@@ -4,6 +4,7 @@
     >>> portal = layer['portal']
 
 """
+import os
 import string
 import random
 import logging
@@ -246,14 +247,25 @@ class Setup(object):
     def update_memcached_host(self):
         """ Update memcached host to localhost
         """
+        servers = os.environ.get("MEMCACHE_SERVER", None)
+        if not servers:
+            logger.warn("MEMCACHE_SERVER environment not set. Nothing to do.")
+            return
+
         site = getSite()
-        
+        servers = tuple(servers.split(','))
         memcached_managers = site.objectValues('Memcached Manager')
         for obj in memcached_managers:
-            obj._settings['servers'] = ('127.0.0.1:11211', )
+            current = obj._settings.get('settings', ())
+            if current == servers:
+                continue
+            obj._settings['servers'] = servers
+            obj._p_changed = True
             self._changed = True
 
-        logger.warn('Memcached domain set to 127.0.0.1:11211 for all "Memcached Manage" objects.')
+        logger.warn(
+            'Memcached domain set to %s for all "Memcached Manage" objects.',
+            servers)
 
     #
     # API
