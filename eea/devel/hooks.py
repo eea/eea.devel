@@ -8,8 +8,11 @@ import os
 import string
 import random
 import logging
+from zope.component import getUtility
 from zope.component.hooks import setSite, getSite
 from plone import api
+from plone.registry.interfaces import IRegistry
+from plone.cachepurging.interfaces import ICachePurgingSettings
 from eea.devel.config import ZOPEUSER
 from Products.CMFCore.utils import getToolByName
 logger = logging.getLogger('eea.devel')
@@ -271,6 +274,30 @@ class Setup(object):
             'Memcached domain set to %s for all "Memcached Manage" objects.',
             servers)
 
+    def update_varnish_host(self):
+        """ Update varnish host
+        """
+        cachingProxies = ["http://varnish:6081"]
+        domains = os.environ.get("SERVER_NAME", "")
+        if domains:
+            if ":" not in domains:
+                domains += ":80"
+            if not domains.startswith("http"):
+                domains = 'http://' + domains
+            domains = [domains]
+        else:
+            domains = []
+
+        registry = getUtility(IRegistry)
+        purgingSettings = registry.forInterface(ICachePurgingSettings)
+        purgingSettings.cachingProxies = cachingProxies
+
+        logger.warn("Varnish cachingProxies set to %s", cachingProxies)
+
+        purgingSettings.domains = domains
+        logger.warn("Varnish purging domains set to %s", domains)
+
+        self._changed = True
     #
     # API
     #
@@ -300,6 +327,7 @@ class Setup(object):
             self.remove_cookie_domain()
             self.add_plone_users()
             self.update_memcached_host()
+            self.update_varnish_host()
             setSite(oldSite)
 
     def __call__(self):
