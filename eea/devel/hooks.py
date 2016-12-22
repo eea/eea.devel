@@ -277,16 +277,16 @@ class Setup(object):
     def update_varnish_host(self):
         """ Update varnish host
         """
-        cachingProxies = ["http://varnish:6081"]
+        cachingProxies = ("http://varnish:6081",)
         domains = os.environ.get("SERVER_NAME", "")
         if domains:
             if ":" not in domains:
                 domains += ":80"
             if not domains.startswith("http"):
                 domains = 'http://' + domains
-            domains = [domains]
+            domains = (domains,)
         else:
-            domains = []
+            domains = ()
 
         registry = getUtility(IRegistry)
         purgingSettings = registry.forInterface(ICachePurgingSettings)
