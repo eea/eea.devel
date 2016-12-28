@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.8.dev0 - (unreleased)
------------------------
+1.8 - (2016-12-28)
+------------------
 * Feature: Also fix varnish settings
   [voineali refs #78655]
 
