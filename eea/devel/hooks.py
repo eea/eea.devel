@@ -289,15 +289,16 @@ class Setup(object):
             domains = ()
 
         registry = getUtility(IRegistry)
-        purgingSettings = registry.forInterface(ICachePurgingSettings)
-        purgingSettings.cachingProxies = cachingProxies
-
-        logger.warn("Varnish cachingProxies set to %s", cachingProxies)
-
-        purgingSettings.domains = domains
-        logger.warn("Varnish purging domains set to %s", domains)
-
-        self._changed = True
+        try:
+            purgingSettings = registry.forInterface(ICachePurgingSettings)
+            purgingSettings.cachingProxies = cachingProxies
+            purgingSettings.domains = domains
+        except Exception, err:
+            logger.exception(err)
+        else:
+            logger.warn("Varnish cachingProxies set to %s", cachingProxies)
+            logger.warn("Varnish purging domains set to %s", domains)
+            self._changed = True
     #
     # API
     #
