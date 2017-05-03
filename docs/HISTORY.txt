@@ -3,6 +3,8 @@ Changelog
 
 2.1.dev0 - (unreleased)
 -----------------------
+* Feature: secure cookie over HTTPS disabled
+  [alecghica refs #84485]
 
 2.0 - (2017-04-24)
 ------------------

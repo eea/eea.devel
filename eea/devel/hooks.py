@@ -181,6 +181,24 @@ class Setup(object):
         plone_session.cookie_domain = ''
         self._changed = True
 
+    def remove_cookie_over_https(self):
+        """ Remove secure cookie
+        """
+
+        site = getSite()
+        acl_users = getattr(site, 'acl_users', None)
+        plone_session = getattr(acl_users, 'plone_session', None)
+        if not plone_session:
+            return None
+
+        secure = getattr(plone_session, 'secure', '')
+        if not secure:
+            return None
+
+        logger.warn('Secure cookie over HTTPS disabled.')
+        plone_session.secure = False
+        self._changed = True
+
     def add_plone_user(self, role):
         """ Create plone users for main roles
         """
@@ -326,6 +344,7 @@ class Setup(object):
             oldSite = getSite()
             setSite(site)
             self.remove_cookie_domain()
+            self.remove_cookie_over_https()
             self.add_plone_users()
             self.update_memcached_host()
             self.update_varnish_host()
