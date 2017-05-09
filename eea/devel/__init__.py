@@ -1,7 +1,7 @@
 """ Main product initializer
 """
-import transaction
 import logging
+import transaction
 import Zope2
 import Globals
 from eea.devel.hooks import Setup
