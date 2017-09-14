@@ -1,10 +1,9 @@
 =========
 EEA Devel
 =========
-.. image:: http://ci.eionet.europa.eu/job/eea.devel-www/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea.devel-www/lastBuild
-.. image:: http://ci.eionet.europa.eu/job/eea.devel-plone4/badge/icon
-  :target: http://ci.eionet.europa.eu/job/eea.devel-plone4/lastBuild
+.. image:: http://ci.eionet.europa.eu/job/eea/job/eea.devel/job/master/badge/icon
+  :target: http://ci.eionet.europa.eu/job/eea/job/eea.devel/job/master/display/redirect
+
 
 EEA Devel is a helper package to be used with a new EEA Data.fs.
 
