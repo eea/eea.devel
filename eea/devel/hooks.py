@@ -233,7 +233,6 @@ class Setup(object):
         )
         self._changed = True
 
-
     def add_plone_users(self):
         """ Add development Plone users for each role
         """
@@ -317,6 +316,13 @@ class Setup(object):
             logger.warn("Varnish cachingProxies set to %s", cachingProxies)
             logger.warn("Varnish purging domains set to %s", domains)
             self._changed = True
+
+    def update_global_status_message(self):
+        """ Disable automatic_enable for the global status message
+        """
+        api.portal.set_registry_record('ftw.globalstatusmessage.interfaces.IStatusMessageConfigForm.enabled_automatic_bool', False)
+        logger.warn('Disabled the automatic activation of the global status message.')
+
     #
     # API
     #
@@ -348,6 +354,7 @@ class Setup(object):
             self.add_plone_users()
             self.update_memcached_host()
             self.update_varnish_host()
+            self.update_global_status_message()
             setSite(oldSite)
 
     def __call__(self):
