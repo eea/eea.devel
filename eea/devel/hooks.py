@@ -320,8 +320,12 @@ class Setup(object):
     def update_global_status_message(self):
         """ Disable automatic_enable for the global status message
         """
-        api.portal.set_registry_record('ftw.globalstatusmessage.interfaces.IStatusMessageConfigForm.enabled_automatic_bool', False)
-        logger.warn('Disabled the automatic activation of the global status message.')
+        try:
+            api.portal.set_registry_record('ftw.globalstatusmessage.interfaces.IStatusMessageConfigForm.enabled_automatic_bool', False)
+        except Exception, err:
+            logger.exception(err)
+        else:
+            logger.warn('Disabled the automatic activation of the global status message.')
 
     #
     # API
