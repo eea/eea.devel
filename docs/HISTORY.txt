@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.4.dev0 - (unreleased)
+2.4 - (2018-06-13)
 -----------------------
 * Feature: disable the automatic activation of global status message
   [alecghica refs #92952]
