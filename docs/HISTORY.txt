@@ -1,6 +1,13 @@
 Changelog
 =========
 
+2.5 - (2019-01-28)
+---------------------
+* Jenkins: Add sonarqube step
+  [avoinea refs #101552]
+* Change: updated URLs pointing to eea.europa.eu with https://
+  [alecghica refs #95849]
+
 2.4 - (2018-06-13)
 -----------------------
 * Feature: disable the automatic activation of global status message
@@ -80,4 +87,3 @@ Changelog
 1.0 - (2014-10-15)
 ------------------
 - Initial release
-
